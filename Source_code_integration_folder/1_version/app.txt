@@ -1,0 +1,117 @@
+import './App.css';
+import { useState } from 'react';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import List from '@mui/material/List';
+
+let todoItemId = 0;
+
+const App = () => {
+  const [todoItemList, setTodoItemList] = useState([]);
+
+  const onSubmit = (newTodoItem) => {
+    setTodoItemList([...todoItemList, {
+      id: todoItemId++,
+      todoItemContent: newTodoItem,
+      isFinished: false
+    }]);
+  };
+
+  const onTodoItemClick = (clickedTodoItem) => {
+    setTodoItemList(todoItemList.map((todoItem) => {
+      if (clickedTodoItem.id === todoItem.id) {
+        return {
+          ...todoItem,
+          isFinished: !todoItem.isFinished
+        };
+      }
+      return todoItem;
+    }));
+  };
+
+  const onRemoveClick = (removeTodoItem) => {
+    setTodoItemList(todoItemList.filter((todoItem) => todoItem.id !== removeTodoItem.id));
+  };
+
+  return (
+    <div className="App">
+      <Container sx={{ paddingTop: 3 }}>
+        <Typography variant="h4" gutterBottom align="center">Todo List</Typography>
+        <TodoItemInputField onSubmit={onSubmit} />
+        <TodoItemList
+          todoItemList={todoItemList}
+          onTodoItemClick={onTodoItemClick}
+          onRemoveClick={onRemoveClick}
+        />
+      </Container>
+    </div>
+  );
+};
+
+const TodoItemInputField = (props) => {
+  const [input, setInput] = useState("");
+
+  const onSubmit = () => {
+    if (input.trim()) {
+      props.onSubmit(input);
+      setInput("");
+    }
+  };
+
+  return (
+    <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+      <TextField
+        id='todo-item-input'
+        label='Todo Item'
+        variant='outlined'
+        fullWidth
+        value={input}
+        onChange={(user) => setInput(user.target.value)}
+        sx={{ mr: 1 }}
+      />
+      <Button variant="contained" onClick={onSubmit} color="primary">Submit</Button>
+    </Box>
+  );
+};
+
+const TodoItem = (props) => {
+  const style = props.todoItem.isFinished ? { textDecoration: 'line-through', color: 'gray' } : {};
+
+  return (
+    <Paper elevation={1} sx={{ mb: 1, padding: 1 }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <span style={style} onClick={() => props.onTodoItemClick(props.todoItem)}>
+          {props.todoItem.todoItemContent}
+        </span>
+        <Button variant="outlined" onClick={() => props.onRemoveClick(props.todoItem)} color="error">Remove</Button>
+      </Box>
+    </Paper>
+  );
+};
+
+const TodoItemList = (props) => {
+  const todoList = props.todoItemList.map((todoItem) => {
+    return (
+      <TodoItem
+        key={todoItem.id}
+        todoItem={todoItem}
+        onTodoItemClick={props.onTodoItemClick}
+        onRemoveClick={props.onRemoveClick}
+      />
+    );
+  });
+
+  return (
+    <Box>
+      <List sx={{ margin: "auto", maxWidth: 720 }}>
+        {todoList}
+      </List>
+    </Box>
+  );
+};
+
+export default App;

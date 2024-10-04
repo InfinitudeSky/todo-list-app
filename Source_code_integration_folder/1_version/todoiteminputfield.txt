@@ -1,7 +1,7 @@
-import { useState } from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import { useState } from 'react';
+import Box from '@mui/material/Box';
 
 const TodoItemInputField = (props) => {
   const [input, setInput] = useState("");
@@ -14,7 +14,7 @@ const TodoItemInputField = (props) => {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       onSubmit();
     }
   };
@@ -22,18 +22,16 @@ const TodoItemInputField = (props) => {
   return (
     <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
       <TextField
-        id="todo-item-input"
-        label="Todo Item"
-        variant="outlined"
+        id='todo-item-input'
+        label='Todo Item'
+        variant='outlined'
         fullWidth
         value={input}
         onChange={(user) => setInput(user.target.value)}
         onKeyDown={handleKeyDown}
         sx={{ mr: 1 }}
       />
-      <Button variant="contained" onClick={onSubmit} color="primary">
-        Submit
-      </Button>
+      <Button variant="contained" onClick={onSubmit} color="primary">Submit</Button>
     </Box>
   );
 };
